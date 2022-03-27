@@ -1,16 +1,24 @@
 from socketserver import BaseRequestHandler, TCPServer
+from jsonschema import validate
 import time
+import json
+
 
 class EchoHandler(BaseRequestHandler):
     def handle(self):
         print('Got connection from', self.client_address)
         while True:
             msg = self.request.recv(8192)
-            # 8192 refers to the number of received bytes to get from the request in one data block
+            print("Message received:", msg)
             if msg:
-                print(msg)
+                print("if msg was triggered")
+                json_payload = json.loads(msg) # this turns a string into a python dict
+                schema = json.loads(open('json/json_book.schema').read()) # dictionary
+                print(validate(json_payload, schema))
+
             else:
                 break
+
 
 if __name__ == '__main__':
     print("Waiting for connection ...")
