@@ -6,6 +6,7 @@ class EchoHandler(BaseRequestHandler):
         print('Got connection from', self.client_address)
         while True:
             msg = self.request.recv(8192)
+            # 8192 refers to the number of received bytes to get from the request in one data block
             if msg:
                 print(msg)
             else:
