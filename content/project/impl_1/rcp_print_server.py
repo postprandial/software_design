@@ -1,5 +1,7 @@
 from socketserver import BaseRequestHandler, TCPServer
+from jsonschema import validate
 import time
+import json
 
 class EchoHandler(BaseRequestHandler):
     def handle(self):
@@ -9,6 +11,12 @@ class EchoHandler(BaseRequestHandler):
             # 8192 refers to the number of received bytes to get from the request in one data block
             if msg:
                 print(msg)
+                # now validate the message
+                json_payload = json.loads(msg)
+                f = open('json/json_book.schema')
+                schema = json.loads(f.read())
+                f.close()
+                validate(json_payload, schema)
             else:
                 break
 
